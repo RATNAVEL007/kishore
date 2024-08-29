@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -7,8 +6,6 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 import joblib
 import matplotlib.pyplot as plt
-from tensorflow.keras.models import load_model
-import base64
 
 st.set_page_config(page_title="Non-Verbal Communication Preferences", page_icon="🌍", layout="wide")
 
@@ -26,15 +23,13 @@ y_encoded = label_encoder.fit_transform(y)
 @st.cache_resource
 def load_pipeline_and_model():
     pipeline = joblib.load('non_verbal_pipeline.pkl')  # Load the preprocessing pipeline
-    model = load_model('non_verbal_tourist_data.keras')  # Load the trained model
+    model = joblib.load('non_verbal_tourist_model.pkl')  # Load the trained scikit-learn model
     return pipeline, model
 
 pipeline, model = load_pipeline_and_model()
 
-
 st.title("🌍 Non-Verbal Communication Preferences Prediction")
 st.markdown("---")
-
 
 st.sidebar.header("🛠️ Feature Selection")
 input_data = {}
@@ -68,7 +63,7 @@ with col2:
 
             try:
                 input_processed = pipeline.transform(input_df)
-                prediction = model.predict(input_processed)
+                prediction = model.predict_proba(input_processed)
                 predicted_class_index = np.argmax(prediction)
                 predicted_class = label_encoder.inverse_transform([predicted_class_index])[0]
                 st.success(f"🌟 **Predicted Client Type:** {predicted_class.upper()} 🎯")
@@ -93,6 +88,5 @@ st.write("""
 🌿 This tool predicts the type of client based on non-verbal communication preferences. Choose the features in the sidebar and click '🔍 Predict Client Type' to get a prediction. The confidence scores show how confident the model is about each possible client type. Enhance your customer experience by understanding their preferences! 💼
 """)
 
-
 st.markdown("---")
-st.markdown("Created by KISHORE ")
+st.markdown("Created by KISHORE")

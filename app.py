@@ -15,7 +15,7 @@ st.set_page_config(page_title="Non-Verbal Communication Preferences", page_icon=
 
 @st.cache_data
 def load_data():
-    return pd.read_csv('/content/non-verbal tourist data.csv')
+    return pd.read_csv('non-verbal tourist data(1).csv')
 
 data = load_data()
 X = data.drop('Type of Client', axis=1)
